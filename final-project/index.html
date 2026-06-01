@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Born to Create — An AI-Made Ad About Human Creativity</title>
+<meta name="description" content="Born to Create: an 11-shot AI-generated advertisement, and the research, process, and reflection behind it. AI+Design Studio final project." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F3ECE0;
+    --paper-2:#ECE3D4;
+    --paper-3:#E4D9C6;
+    --ink:#211B14;
+    --ink-soft:#544A3D;
+    --ink-faint:#8B8070;
+    --clay:#BC4B26;
+    --clay-deep:#8F3517;
+    --ochre:#C8902F;
+    --line:rgba(33,27,20,0.13);
+    --line-strong:rgba(33,27,20,0.28);
+    --display:"Fraunces",Georgia,serif;
+    --body:"Hanken Grotesk",system-ui,sans-serif;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-padding-top:74px;}
+  body{
+    font-family:var(--body);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* subtle paper grain */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;z-index:1;
+    opacity:0.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  }
+
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(243,236,224,0.82);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;
+  }
+  .brand{
+    font-family:var(--display);
+    font-weight:600;font-size:1.12rem;
+    letter-spacing:-0.01em;text-decoration:none;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .dot{
+    width:11px;height:11px;border-radius:50%;
+    background:var(--clay);display:inline-block;
+    box-shadow:0 0 0 4px rgba(188,75,38,0.16);
+  }
+  nav ul{list-style:none;display:flex;gap:26px;align-items:center;}
+  nav a{
+    text-decoration:none;font-size:0.82rem;font-weight:500;
+    letter-spacing:0.04em;text-transform:uppercase;
+    color:var(--ink-soft);position:relative;padding:4px 0;
+    transition:color .2s;
+  }
+  nav a::after{
+    content:"";position:absolute;left:0;bottom:-2px;
+    width:0;height:1.5px;background:var(--clay);transition:width .25s ease;
+  }
+  nav a:hover,nav a.active{color:var(--ink);}
+  nav a.active::after,nav a:hover::after{width:100%;}
+  .menu-btn{display:none;background:none;border:0;cursor:pointer;padding:6px;}
+  .menu-btn span{display:block;width:24px;height:2px;background:var(--ink);margin:5px 0;transition:.3s;}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:9vw 0 7vw;overflow:hidden;}
+  .hero-bg{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(120% 90% at 78% 10%, rgba(200,144,47,0.20), transparent 55%),
+      radial-gradient(90% 80% at 12% 95%, rgba(188,75,38,0.16), transparent 60%);
+  }
+  .hero .wrap{position:relative;z-index:2;}
+  .eyebrow{
+    font-size:0.78rem;font-weight:600;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--clay-deep);margin-bottom:22px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .eyebrow::before{content:"";width:42px;height:1.5px;background:var(--clay);}
+  h1.title{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(3.2rem,11vw,8.4rem);
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin-bottom:30px;
+  }
+  h1.title em{font-style:italic;color:var(--clay);font-weight:500;}
+  .lede{
+    font-family:var(--display);
+    font-size:clamp(1.25rem,2.4vw,1.85rem);
+    font-weight:400;line-height:1.45;
+    max-width:30ch;color:var(--ink-soft);
+    margin-bottom:40px;
+  }
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:30px 48px;align-items:baseline;
+    padding-top:28px;border-top:1px solid var(--line);
+  }
+  .hero-meta div span{
+    display:block;font-size:0.72rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;
+  }
+  .hero-meta div strong{font-weight:600;font-size:1.02rem;}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{position:relative;z-index:2;padding:7vw 0;}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:48px;flex-wrap:wrap;}
+  .sec-num{
+    font-family:var(--display);font-size:1rem;font-weight:600;
+    color:var(--clay);font-feature-settings:"tnum";
+  }
+  h2{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(2rem,5vw,3.4rem);line-height:1.02;
+    letter-spacing:-0.02em;
+  }
+  .sec-kicker{
+    font-size:0.74rem;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--ink-faint);margin-left:auto;align-self:flex-end;font-weight:600;
+  }
+  .prose{max-width:62ch;font-size:1.06rem;color:var(--ink-soft);}
+  .prose p{margin-bottom:1.1em;}
+  .prose strong{color:var(--ink);font-weight:600;}
+
+  .divider{height:1px;background:var(--line);max-width:var(--maxw);margin:0 auto;}
+
+  /* ---------- FILM ---------- */
+  #film{background:var(--ink);color:var(--paper);}
+  #film .sec-num{color:var(--ochre);}
+  #film h2{color:var(--paper);}
+  #film .sec-kicker{color:rgba(243,236,224,0.5);}
+  .player{
+    position:relative;width:100%;aspect-ratio:16/9;border-radius:6px;
+    overflow:hidden;background:#0d0a07;
+    border:1px solid rgba(243,236,224,0.14);
+    box-shadow:0 40px 80px -30px rgba(0,0,0,0.6);
+    margin-bottom:44px;
+  }
+  .player iframe,.player video{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .player .placeholder{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;
+    background:
+      radial-gradient(80% 80% at 50% 40%, rgba(200,144,47,0.18), transparent 70%),
+      linear-gradient(160deg,#161009,#0d0a07);
+  }
+  .player .play{
+    width:74px;height:74px;border-radius:50%;
+    border:1.5px solid rgba(243,236,224,0.6);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .player .play::after{
+    content:"";border-left:18px solid var(--paper);
+    border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px;
+  }
+  .player .ph-label{font-family:var(--display);font-size:1.15rem;color:var(--paper);}
+  .player .ph-sub{font-size:0.85rem;color:rgba(243,236,224,0.55);max-width:42ch;}
+  .film-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:54px;}
+  #film .prose{color:rgba(243,236,224,0.82);}
+  #film .prose strong{color:var(--paper);}
+  .film-stats{display:flex;flex-direction:column;gap:0;}
+  .film-stats .stat{padding:18px 0;border-bottom:1px solid rgba(243,236,224,0.15);}
+  .film-stats .stat:first-child{border-top:1px solid rgba(243,236,224,0.15);}
+  .film-stats .stat .k{font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(243,236,224,0.5);margin-bottom:4px;}
+  .film-stats .stat .v{font-family:var(--display);font-size:1.3rem;color:var(--paper);}
+
+  /* ---------- QUESTION / CASE ---------- */
+  .question-block{
+    font-family:var(--display);
+    font-size:clamp(1.6rem,4vw,2.9rem);
+    line-height:1.22;font-weight:400;letter-spacing:-0.01em;
+    max-width:20ch;margin-bottom:48px;
+  }
+  .question-block em{font-style:italic;color:var(--clay);}
+  .thesis-card{
+    background:var(--paper-2);border:1px solid var(--line);
+    border-left:4px solid var(--clay);
+    padding:30px 34px;border-radius:4px;max-width:64ch;
+  }
+  .thesis-card .label{font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay-deep);font-weight:600;margin-bottom:10px;}
+  .thesis-card p{font-family:var(--display);font-size:1.25rem;line-height:1.4;}
+
+  /* ---------- RESEARCH DASHBOARD ---------- */
+  #research{background:var(--paper-2);}
+  .dash-top{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;margin-bottom:56px;align-items:start;}
+  .findings{display:flex;flex-direction:column;gap:14px;}
+  .finding{
+    background:var(--paper);border:1px solid var(--line);border-radius:4px;
+    padding:18px 20px;display:flex;gap:16px;align-items:flex-start;
+  }
+  .finding .fnum{font-family:var(--display);font-weight:600;color:var(--clay);font-size:1.1rem;flex-shrink:0;line-height:1.4;}
+  .finding p{font-size:0.97rem;color:var(--ink-soft);}
+  .finding strong{color:var(--ink);}
+
+  .src-head{font-family:var(--display);font-size:1.4rem;font-weight:600;margin:8px 0 22px;}
+  .sources{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .source{
+    background:var(--paper);border:1px solid var(--line);border-radius:4px;
+    padding:20px 22px;text-decoration:none;display:block;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .source:hover{transform:translateY(-3px);border-color:var(--line-strong);box-shadow:0 14px 30px -18px rgba(33,27,20,0.4);}
+  .source .tag{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--clay-deep);font-weight:600;margin-bottom:8px;}
+  .source h4{font-family:var(--display);font-size:1.08rem;font-weight:600;line-height:1.2;margin-bottom:8px;}
+  .source p{font-size:0.88rem;color:var(--ink-soft);line-height:1.5;}
+  .source .arrow{margin-top:12px;font-size:0.8rem;color:var(--clay);font-weight:600;letter-spacing:0.04em;}
+
+  .verify{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  .mini-head{font-size:0.74rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--clay-deep);font-weight:700;margin-bottom:16px;}
+  .decisions li,.verify ul li{margin-bottom:14px;font-size:0.98rem;color:var(--ink-soft);list-style:none;padding-left:24px;position:relative;}
+  .decisions li::before,.verify ul li::before{content:"→";position:absolute;left:0;color:var(--clay);font-weight:700;}
+  .decisions li strong,.verify li strong{color:var(--ink);}
+
+  /* ---------- PROCESS ---------- */
+  .workflow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:60px;border-top:1px solid var(--line);}
+  .step{padding:26px 22px 26px 0;border-bottom:1px solid var(--line);position:relative;}
+  .step .sidx{font-family:var(--display);font-size:2.4rem;font-weight:600;color:var(--paper-3);line-height:1;margin-bottom:10px;}
+  .step h4{font-family:var(--display);font-size:1.12rem;font-weight:600;margin-bottom:8px;}
+  .step p{font-size:0.9rem;color:var(--ink-soft);}
+  .proc-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:54px;}
+  .panel{background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:28px 30px;}
+  .panel.warn{border-left:4px solid var(--clay);}
+  .panel h3{font-family:var(--display);font-size:1.35rem;font-weight:600;margin-bottom:16px;}
+  .panel ul{list-style:none;}
+  .panel li{position:relative;padding-left:22px;margin-bottom:12px;font-size:0.97rem;color:var(--ink-soft);}
+  .panel li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:50%;background:var(--clay);}
+  .panel li strong{color:var(--ink);}
+  .promptbox{
+    background:var(--ink);color:var(--paper);border-radius:4px;padding:22px 24px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:0.84rem;line-height:1.65;
+    margin-top:14px;overflow-x:auto;
+  }
+  .promptbox .c{color:var(--ochre);}
+
+  /* ---------- AUTHORSHIP ---------- */
+  #authorship{background:var(--paper-2);}
+  .auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .auth-col{padding:34px 36px;}
+  .auth-col.ai{background:var(--paper);}
+  .auth-col.me{background:var(--ink);color:var(--paper);}
+  .auth-col h3{font-family:var(--display);font-size:1.5rem;font-weight:600;margin-bottom:6px;}
+  .auth-col .sub{font-size:0.76rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:22px;font-weight:600;}
+  .auth-col.ai .sub{color:var(--clay-deep);}
+  .auth-col.me .sub{color:var(--ochre);}
+  .auth-col ul{list-style:none;}
+  .auth-col li{position:relative;padding-left:20px;margin-bottom:13px;font-size:0.97rem;line-height:1.5;}
+  .auth-col li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;}
+  .auth-col.ai li{color:var(--ink-soft);}
+  .auth-col.ai li::before{background:var(--clay);}
+  .auth-col.me li{color:rgba(243,236,224,0.85);}
+  .auth-col.me li::before{background:var(--ochre);}
+  .auth-col.me li strong,.auth-col.ai li strong{font-weight:600;}
+  .auth-col.me li strong{color:var(--paper);}
+  .auth-col.ai li strong{color:var(--ink);}
+
+  /* ---------- REFLECTION ---------- */
+  #reflection{background:var(--paper);}
+  .click-moment{
+    font-family:var(--display);font-style:italic;
+    font-size:clamp(1.5rem,3.6vw,2.6rem);line-height:1.3;
+    max-width:22ch;color:var(--ink);margin-bottom:48px;font-weight:400;
+  }
+  .click-moment .hl{color:var(--clay);font-style:normal;}
+  .then-now{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .tn{background:var(--paper-2);padding:30px 32px;}
+  .tn .label{font-size:0.74rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+  .tn.then .label{color:var(--ink-faint);}
+  .tn.now .label{color:var(--clay-deep);}
+  .tn p{font-size:1.02rem;color:var(--ink-soft);}
+  .tn.now{background:var(--paper-3);}
+  .continue{margin-top:44px;max-width:64ch;}
+
+  /* ---------- FOOTER / LINKS ---------- */
+  footer{background:var(--ink);color:var(--paper);padding:7vw 0 3vw;position:relative;z-index:2;}
+  footer h2{color:var(--paper);margin-bottom:8px;}
+  footer .sec-num{color:var(--ochre);}
+  .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:40px 0 56px;}
+  .link-card{
+    border:1px solid rgba(243,236,224,0.18);border-radius:4px;padding:24px 26px;
+    text-decoration:none;display:flex;justify-content:space-between;align-items:center;gap:18px;
+    transition:background .2s,border-color .2s;
+  }
+  .link-card:hover{background:rgba(243,236,224,0.06);border-color:rgba(243,236,224,0.4);}
+  .link-card .lk{font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--ochre);margin-bottom:6px;font-weight:600;}
+  .link-card .lv{font-family:var(--display);font-size:1.15rem;color:var(--paper);}
+  .link-card .ext{font-size:1.3rem;color:rgba(243,236,224,0.5);}
+  .foot-bottom{padding-top:30px;border-top:1px solid rgba(243,236,224,0.18);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:0.85rem;color:rgba(243,236,224,0.55);}
+
+  /* placeholder styling — find & replace these */
+  .ph{
+    background:repeating-linear-gradient(45deg,rgba(200,144,47,0.14),rgba(200,144,47,0.14) 10px,transparent 10px,transparent 20px);
+    border:1.5px dashed var(--ochre);border-radius:4px;
+    padding:2px 8px;font-weight:600;color:var(--clay-deep);font-size:0.9em;
+  }
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:880px){
+    .film-grid,.dash-top,.verify,.proc-cols,.auth-grid,.then-now,.links-grid,.sources{grid-template-columns:1fr;}
+    .workflow{grid-template-columns:1fr 1fr;}
+    nav ul{
+      position:fixed;top:0;right:0;height:100vh;width:74%;max-width:320px;
+      background:var(--paper);flex-direction:column;align-items:flex-start;
+      padding:90px 32px;gap:22px;transform:translateX(100%);transition:transform .35s ease;
+      box-shadow:-20px 0 50px -20px rgba(0,0,0,0.3);z-index:60;
+    }
+    nav ul.open{transform:none;}
+    nav a{font-size:1rem;}
+    .menu-btn{display:block;z-index:70;}
+    .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .menu-btn.open span:nth-child(2){opacity:0;}
+    .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .sec-kicker{margin-left:0;width:100%;}
+  }
+  @media(max-width:520px){
+    .workflow{grid-template-columns:1fr;}
+    .wrap{padding:0 20px;}
+    .nav-inner{padding:12px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span>Born&nbsp;to&nbsp;Create</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav>
+      <ul id="navList">
+        <li><a href="#film">The&nbsp;Film</a></li>
+        <li><a href="#question">The&nbsp;Question</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#authorship">Authorship</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="eyebrow reveal">AI + Design Studio &nbsp;·&nbsp; Final Project</div>
+    <h1 class="title reveal">Born&nbsp;to<br><em>Create</em></h1>
+    <p class="lede reveal">An ad made <em>by</em> AI — about the oldest, most human thing we do. And honest about how it was made.</p>
+    <div class="hero-meta reveal">
+      <div><span>Project</span><strong>An 11-shot AI-generated film</strong></div>
+      <div><span>By</span><strong><span class="ph">[ Your Name ]</span></strong></div>
+      <div><span>Built with</span><strong>Kling · Firefly · Veo · Suno</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE FILM ============ -->
+<section id="film">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2>The Film</h2>
+      <span class="sec-kicker">Product / Outcome</span>
+    </div>
+
+    <!-- VIDEO: replace the placeholder div with your embed.
+         YouTube example:  <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+         Local file example: <video src="bornToCreate.mp4" controls poster="images/poster.jpg"></video> -->
+    <div class="player reveal">
+      <div class="placeholder">
+        <div class="play"></div>
+        <div class="ph-label">Embed your final film here</div>
+        <div class="ph-sub">Replace this block with a YouTube/Vimeo &lt;iframe&gt; or a local &lt;video&gt; tag. (Instructions are in the HTML comment right above this.)</div>
+      </div>
+    </div>
+
+    <div class="film-grid">
+      <div class="prose reveal">
+        <p><strong>Born to Create</strong> is a 60-second film generated almost entirely with AI video tools — and it argues, gently, that the urge to make things is older than language itself.</p>
+        <p>It opens on a hand pressing into wet sand, cuts through cave paintings and small human acts of making, and builds to an old man turning a carved wooden bird in his hands. Then the screen goes white and a single line appears: <strong>"Now we create together."</strong> The film ends by telling you the truth — that it was made with AI — instead of hiding it.</p>
+        <p>That disclosure isn't a disclaimer tacked on the end. It's the whole point. The film only works if it's honest about its own making.</p>
+      </div>
+      <div class="film-stats reveal">
+        <div class="stat"><div class="k">Length</div><div class="v">~60 seconds, 11 shots</div></div>
+        <div class="stat"><div class="k">Emotional peak</div><div class="v">The carved bird (Shot 6)</div></div>
+        <div class="stat"><div class="k">Ending</div><div class="v">White screen + AI disclosure</div></div>
+        <div class="stat"><div class="k">One shot is real</div><div class="v">The opening beach was filmed on a phone</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE QUESTION ============ -->
+<section id="question">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2>The Question</h2>
+      <span class="sec-kicker">Case Study · Inquiry</span>
+    </div>
+    <p class="question-block reveal">Can an ad made with AI honestly celebrate human creativity — and will people <em>trust</em> it if it tells the truth about how it was made?</p>
+    <div class="thesis-card reveal">
+      <div class="label">Where the project landed</div>
+      <p>AI is the newest tool in a line that runs back to charcoal on a cave wall. The film doesn't pretend a machine made art on its own — it shows a human hand steering the tool, in the open. Honesty became the creative strategy, not a compromise.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ RESEARCH DASHBOARD ============ -->
+<section id="research">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2>Research Dashboard</h2>
+      <span class="sec-kicker">Approach &amp; Engagement</span>
+    </div>
+
+    <div class="dash-top">
+      <div class="reveal">
+        <p class="prose">The film makes an argument, so the research had to test whether that argument holds up. Three threads ran in parallel: <strong>how audiences actually feel about AI ads</strong>, <strong>why emotional storytelling works</strong>, and <strong>how the AI-video tools themselves evolved</strong> to the point where one student could make a film like this at all.</p>
+        <h3 class="src-head" style="margin-top:34px;">What the evidence kept saying</h3>
+        <div class="findings">
+          <div class="finding"><span class="fnum">1</span><p><strong>People can tell.</strong> Viewers spontaneously identify most AI ads as AI — the only one that fooled them was made by a professional through heavy iterative editing. Craft is the difference.</p></div>
+          <div class="finding"><span class="fnum">2</span><p><strong>People want honesty.</strong> A majority of consumers want advertisers to disclose AI, and transparency can turn discomfort into curiosity rather than backlash.</p></div>
+          <div class="finding"><span class="fnum">3</span><p><strong>Emotion has an architecture.</strong> Effective ads hook with emotion early, then sustain with meaningful, empathetic moments — almost exactly the shape of this script.</p></div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="src-head">Source Library</h3>
+        <div class="sources">
+          <a class="source" href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank" rel="noopener">
+            <div class="tag">Industry Data</div>
+            <h4>The AI Ad Gap Widens — IAB</h4>
+            <p>83% of ad execs now deploy AI in creative, yet consumer sentiment is cooling and most want disclosure.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://nielseniq.com/global/en/insights/education/2024/will-ai-generated-advertising-disrupt-the-creative-industry/" target="_blank" rel="noopener">
+            <div class="tag">Consumer Science</div>
+            <h4>Will AI Ads Disrupt the Industry? — NielsenIQ</h4>
+            <p>Only the professionally, heavily-edited AI ad escaped detection. Evidence that craft matters.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://cmr.berkeley.edu/2025/12/authenticity-in-the-age-of-ai/" target="_blank" rel="noopener">
+            <div class="tag">Strategy</div>
+            <h4>Authenticity in the Age of AI — CMR</h4>
+            <p>Vodafone's openly-AI film positioned them as experimenters, not deceivers — the model for disclosure.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://www.ama.org/2025/09/05/inside-the-consumer-brain-how-neuroscience-can-predict-ad-enjoyment/" target="_blank" rel="noopener">
+            <div class="tag">Neuroscience</div>
+            <h4>Inside the Consumer Brain — AMA</h4>
+            <p>Emotional hook early, meaningful moments to sustain — the structural blueprint for the edit.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://link.springer.com/article/10.1007/s43681-025-00735-3" target="_blank" rel="noopener">
+            <div class="tag">Peer-Reviewed · Ethics</div>
+            <h4>AI, Art and Morality — Springer</h4>
+            <p>The academic version of the debate: what value AI art <em>can</em> have, and under what conditions.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://www.thearchaeologist.org/blog/worlds-oldest-cave-art-unveiled-a-glimpse-into-early-human-creativity" target="_blank" rel="noopener">
+            <div class="tag">Archaeology</div>
+            <h4>World's Oldest Cave Art</h4>
+            <p>51,200-year-old narrative art — the factual ground under the film's opening shots.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://link.springer.com/article/10.1007/s10791-025-09628-9" target="_blank" rel="noopener">
+            <div class="tag">Peer-Reviewed · Tech</div>
+            <h4>Bibliometric Review of AI Video — Springer</h4>
+            <p>422 papers reviewed; output peaked in 2024 — the field's explosive arrival, dated and sourced.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+          <a class="source" href="https://deepmind.google/models/veo/prompt-guide/" target="_blank" rel="noopener">
+            <div class="tag">Tool Reference</div>
+            <h4>Veo Prompt Guide — Google DeepMind</h4>
+            <p>The practical manual for the tools, treating each shot as a single self-contained scene.</p>
+            <div class="arrow">Visit source →</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify reveal">
+      <div>
+        <div class="mini-head">How I verified &amp; questioned</div>
+        <ul>
+          <li><strong>Separated showcase from sustainable.</strong> Sora's 2026 shutdown was a reminder that a flashy demo isn't the same as a working tool — I kept claims tied to what actually ships.</li>
+          <li><strong>Weighted peer-review over blogs.</strong> For any factual claim about the field, I leaned on the Springer studies, not timeline listicles, and treated blog timelines as leads to check, not proof.</li>
+          <li><strong>Pressure-tested my own thesis.</strong> The NielsenIQ finding could have killed the project — if people always spot AI, why try? It reframed the goal toward craft instead.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mini-head">How research shaped the film</div>
+        <ul class="decisions">
+          <li>Disclosure end card <strong>← IAB + CMR + NielsenIQ</strong> (audiences want and reward honesty)</li>
+          <li>Heavy, hand-edited iteration <strong>← NielsenIQ</strong> (only crafted AI work passed)</li>
+          <li>Emotional arc &amp; pacing <strong>← AMA neuroscience</strong> (hook early, sustain with meaning)</li>
+          <li>Cave-art opening <strong>← archaeology</strong> (the ancient creative urge, factually grounded)</li>
+          <li>Short shots + consistency features <strong>← scene-stability research</strong> (manage drift)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ PROCESS ============ -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <h2>Process</h2>
+      <span class="sec-kicker">Workflow · Iteration · Pivots</span>
+    </div>
+
+    <div class="workflow reveal">
+      <div class="step">
+        <div class="sidx">01</div>
+        <h4>Script &amp; storyboard</h4>
+        <p>Locked the 11-shot arc and the white-screen ending before generating anything.</p>
+      </div>
+      <div class="step">
+        <div class="sidx">02</div>
+        <h4>Frame generation</h4>
+        <p>Built start &amp; end frames in ChatGPT / Firefly to control each shot's composition.</p>
+      </div>
+      <div class="step">
+        <div class="sidx">03</div>
+        <h4>Image-to-video</h4>
+        <p>Animated frames in Kling, using start/end frames to steer motion and hold the look.</p>
+      </div>
+      <div class="step">
+        <div class="sidx">04</div>
+        <h4>Sound &amp; edit</h4>
+        <p>Voiceover, a sparse Suno underscore, and ambient layers cut against the picture.</p>
+      </div>
+    </div>
+
+    <div class="proc-cols">
+      <div class="panel reveal">
+        <h3>What worked</h3>
+        <ul>
+          <li><strong>Start/end frame control.</strong> Generating both ends of a shot in Firefly first, then letting Kling fill the motion, gave far more consistent results than text-to-video alone.</li>
+          <li><strong>Keeping shots short.</strong> Coherence held better in brief clips, so I edited around the tools' limits instead of fighting them.</li>
+          <li><strong>One real shot.</strong> Filming the opening beach moment on a phone anchored the whole AI film in something undeniably human — the most "AI-design" decision in the project.</li>
+        </ul>
+      </div>
+      <div class="panel warn reveal">
+        <h3>What didn't — and the pivots</h3>
+        <ul>
+          <li><strong>The "too AI" sheen.</strong> Early shots had a synthetic gloss. <em>Pivot:</em> commit to one warm, naturalistic style across all 11 shots instead of treating each as an experiment.</li>
+          <li><strong>Scene drift.</strong> Kling wandered between frames — faces and objects shifted. <em>Pivot:</em> shorter shots, consistency features, and tighter start/end frames.</li>
+          <li><strong>Suno wanted to write a song.</strong> It kept adding melody and structure. <em>Pivot:</em> custom-mode instrumental prompts for an underscore that disappears under the voice.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="mini-head">A prompt that earned its place</div>
+      <div class="promptbox">
+<span class="c">// Suno — instrumental underscore, not a song</span><br>
+Style: sparse fingerstyle acoustic guitar, ambient, intimate,<br>
+&nbsp;&nbsp;no drums, no vocals, no melody, slow, warm,<br>
+&nbsp;&nbsp;underscore for a documentary, room-tone feel, restrained<br>
+<span class="c">// Generated 5–8 takes; kept the one that "forgot it was a song."</span>
+      </div>
+      <p class="prose" style="margin-top:18px;"><span class="ph">Optional:</span> drop a couple of process screenshots here — a Kling generation, a frame pair, your Milanote board. Add them to an <code>images/</code> folder and reference like <code>&lt;img src="images/kling-shot6.jpg"&gt;</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUTHORSHIP ============ -->
+<section id="authorship">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">05</span>
+      <h2>Authorship &amp; Synthesis</h2>
+      <span class="sec-kicker">Where my judgment shows up</span>
+    </div>
+    <p class="prose reveal" style="margin-bottom:36px;">The honest line between what the tools generated and what I decided. AI produced a lot of raw material; almost none of it survived untouched.</p>
+    <div class="auth-grid reveal">
+      <div class="auth-col ai">
+        <div class="sub">The AI did</div>
+        <h3>Raw material</h3>
+        <ul>
+          <li>Generated <strong>frames and motion</strong> for each shot from my prompts</li>
+          <li>Produced <strong>multiple takes</strong> of every shot and music bed</li>
+          <li>Offered <strong>voiceover options</strong> and ambient sound candidates</li>
+          <li>Surfaced <strong>research leads</strong> I then verified myself</li>
+        </ul>
+      </div>
+      <div class="auth-col me">
+        <div class="sub">I did</div>
+        <h3>Every decision</h3>
+        <ul>
+          <li>Wrote and locked the <strong>script and emotional arc</strong></li>
+          <li><strong>Rejected the synthetic look</strong> and chose one naturalistic style</li>
+          <li><strong>Filmed the opening shot for real</strong> against the AI grain</li>
+          <li>Cut, sequenced, and <strong>mixed the sound</strong> so music sits under the voice</li>
+          <li>Made the call that <strong>disclosure is the climax</strong>, not a footnote</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ REFLECTION ============ -->
+<section id="reflection">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">06</span>
+      <h2>Reflection</h2>
+      <span class="sec-kicker">Learning &amp; Growth</span>
+    </div>
+    <p class="click-moment reveal">The click moment: I stopped trying to make AI look human — and started letting a human hand show, <span class="hl">out in the open.</span></p>
+    <div class="then-now reveal">
+      <div class="tn then">
+        <div class="label">Then</div>
+        <p>I assumed a good AI film was one where you couldn't tell. The win was hiding the seams — making the machine convincing enough to pass as something else.</p>
+      </div>
+      <div class="tn now">
+        <div class="label">Now</div>
+        <p>The win is the opposite: human judgment steering the tool, in the open. Disclosure isn't a weakness to manage — it's what makes the work trustworthy and the work itself more honest.</p>
+      </div>
+    </div>
+    <div class="continue prose reveal">
+      <p style="margin-top:8px;"><strong>What I'd keep exploring:</strong> <span class="ph">[ Make this part yours ]</span> — e.g. where the line really sits between "made with AI" and "made by AI," whether disclosure changes how people feel about a piece <em>before</em> vs. <em>after</em> they watch it, and what a longer film would need to hold coherence the way these short shots did.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LINKS / SUBMISSION ============ -->
+<footer id="links">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">07</span>
+      <h2>Project Links</h2>
+    </div>
+    <div class="links-grid reveal">
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <div><div class="lk">Live Site</div><div class="lv"><span class="ph">[ Your GitHub Pages URL ]</span></div></div>
+        <div class="ext">↗</div>
+      </a>
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <div><div class="lk">Repository</div><div class="lv"><span class="ph">[ Your GitHub repo URL ]</span></div></div>
+        <div class="ext">↗</div>
+      </a>
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <div><div class="lk">Process Board</div><div class="lv"><span class="ph">[ Your Milanote link ]</span></div></div>
+        <div class="ext">↗</div>
+      </a>
+      <a class="link-card" href="#film">
+        <div><div class="lk">Final Outcome</div><div class="lv">Watch the film ↑</div></div>
+        <div class="ext">↗</div>
+      </a>
+    </div>
+    <div class="foot-bottom">
+      <span>Born to Create &nbsp;·&nbsp; <span class="ph">[ Your Name ]</span></span>
+      <span>AI + Design Studio &nbsp;·&nbsp; 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // mobile menu
+  const btn=document.getElementById('menuBtn');
+  const list=document.getElementById('navList');
+  btn.addEventListener('click',()=>{btn.classList.toggle('open');list.classList.toggle('open');});
+  list.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{btn.classList.remove('open');list.classList.remove('open');}));
+
+  // scroll reveal
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%3*0.07)+'s';io.observe(el);});
+
+  // active nav highlight
+  const sections=[...document.querySelectorAll('section[id],footer[id]')];
+  const navlinks=[...document.querySelectorAll('nav a')];
+  const spy=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navlinks.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  sections.forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
+
