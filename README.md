@@ -4,7 +4,7 @@
 
 A 40-second AI-made video that asks whether AI can be something we work *with* instead of something we fight. This repo contains the final project site for DESN 374 — AI+Design Studio, built as a live research dashboard, process share, case study, and portfolio piece in one.
 
-**[View the live site →](https://mbrowndesn.github.io/Ai-desn374/final-project/index.html)**
+**[View the live site →](https://mbrowndesn.github.io/Ai-desn374/index.html)**
 
 ---
 
