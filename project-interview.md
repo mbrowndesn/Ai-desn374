@@ -6,7 +6,7 @@ These are my working notes for building my AI + Design project website. The site
 
 ## Project Title
 
-(Still deciding.)
+Born To Create
 A short AI-made video about human creativity, made as an ad for Claude.
 
 ---
