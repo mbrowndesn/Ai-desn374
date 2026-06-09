@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — Born to Create</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231A1A1A'/><text x='16' y='23' font-family='serif' font-weight='900' font-size='22' text-anchor='middle' fill='%230050FF'>B</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:         #F4EFE6;
+      --soft-pink:     #D9E5FA;
+      --fluoro-pink:   #0050FF;
+      --fluoro-orange: #0040D4;
+      --fluoro-lime:   #3AB5FF;
+      --riso-blue:     #05103C;
+      --ink:           #1A1A1A;
+      --nav-h:         54px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* GRAIN */
+    .grain {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9000;
+      opacity: 0.07;
+      mix-blend-mode: multiply;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--ink);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 4vw, 48px);
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(9px, 1.1vw, 12px);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .nav__logo {
+      color: var(--fluoro-lime);
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nav__links {
+      list-style: none;
+      display: flex;
+      gap: clamp(10px, 2.5vw, 32px);
+      flex-wrap: nowrap;
+    }
+    .nav__links a { color: var(--paper); transition: color 0.15s; white-space: nowrap; }
+    .nav__links a:hover { color: var(--fluoro-pink); }
+    .nav__links a.active { color: var(--fluoro-lime); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: clamp(48px, 8vw, 96px) clamp(16px, 6vw, 80px) clamp(24px, 4vw, 48px);
+    }
+    .page-header__kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(9px, 1vw, 11px);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--fluoro-orange);
+      margin-bottom: 12px;
+    }
+    .page-header__h {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(52px, 10vw, 110px);
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      position: relative;
+      display: inline-block;
+    }
+    .page-header__h::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--fluoro-pink);
+      transform: translate(-3px, 3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    /* COLLAGE */
+    .collage {
+      padding: clamp(16px, 4vw, 48px) clamp(16px, 4vw, 48px) clamp(64px, 10vw, 120px);
+      column-count: 3;
+      column-gap: clamp(12px, 2vw, 28px);
+    }
+
+    /* PHOTO CARD */
+    .photo {
+      break-inside: avoid;
+      display: inline-block;
+      width: 100%;
+      margin-bottom: clamp(12px, 2vw, 28px);
+      background: #fff;
+      padding: 10px;
+      box-shadow: 3px 5px 18px rgba(5, 16, 60, 0.18);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+    .photo:hover {
+      transform: scale(1.025) rotate(0deg) !important;
+      box-shadow: 6px 10px 32px rgba(5, 16, 60, 0.28);
+      z-index: 10;
+      position: relative;
+    }
+
+    .tl1 { transform: rotate(-2.4deg); }
+    .tl2 { transform: rotate(-1.1deg); }
+    .tl3 { transform: rotate(-3.2deg); }
+    .tr1 { transform: rotate(1.7deg); }
+    .tr2 { transform: rotate(3.0deg); }
+    .tr3 { transform: rotate(0.8deg); }
+
+    /* IMAGE FRAME */
+    .photo__frame {
+      width: 100%;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      background-image: radial-gradient(circle, var(--fluoro-orange) 1.5px, transparent 1.5px);
+      background-size: 14px 14px;
+      background-color: var(--soft-pink);
+    }
+    .photo__frame::before { content: ''; display: block; }
+    .photo__frame.ar-16-9::before { padding-top: 56.25%; }
+    .photo__frame.ar-4-3::before  { padding-top: 75%; }
+    .photo__frame.ar-1-1::before  { padding-top: 100%; }
+    .photo__frame.ar-4-5::before  { padding-top: 125%; }
+    .photo__frame.ar-9-16::before { padding-top: 177.78%; }
+
+    .photo__frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* FOOTER */
+    .foot {
+      background: var(--ink);
+      color: var(--paper);
+      padding: clamp(28px, 5vw, 56px) clamp(16px, 6vw, 80px);
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(9px, 1vw, 11px);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .foot__back { color: var(--fluoro-lime); border-bottom: 1px solid currentColor; }
+    .foot__back:hover { color: var(--fluoro-pink); }
+
+    @media (max-width: 900px) { .collage { column-count: 2; } }
+    @media (max-width: 540px) {
+      .collage { column-count: 1; }
+      .tl1,.tl2,.tl3,.tr1,.tr2,.tr3 { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- GRAIN -->
+<svg class="grain" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-f">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-f)"/>
+</svg>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Site navigation">
+  <a class="nav__logo" href="index.html">AI+Design/Studio</a>
+  <ul class="nav__links">
+    <li><a href="index.html#research">Research</a></li>
+    <li><a href="index.html#process">Process</a></li>
+    <li><a href="index.html#product">Product</a></li>
+    <li><a href="index.html#reflection">Reflection</a></li>
+    <li><a href="index.html#links">Links</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <p class="page-header__kicker">Born to Create — Process Archive</p>
+  <h1 class="page-header__h" data-text="Gallery">Gallery</h1>
+</header>
+
+<!-- COLLAGE -->
+<div class="collage">
+
+  <div class="photo tr1">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl2">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr2">
+    <div class="photo__frame ar-4-5">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl1">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr3">
+    <div class="photo__frame ar-4-3">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl3">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr1">
+    <div class="photo__frame ar-1-1">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl2">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr2">
+    <div class="photo__frame ar-9-16">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl1">
+    <div class="photo__frame ar-4-3">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr3">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl3">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr1">
+    <div class="photo__frame ar-4-5">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl2">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tr2">
+    <div class="photo__frame ar-1-1">
+      <img src="" alt="">
+    </div>
+  </div>
+
+  <div class="photo tl1">
+    <div class="photo__frame ar-16-9">
+      <img src="" alt="">
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <span>Born to Create — Process Gallery</span>
+  <a class="foot__back" href="index.html">← Back to Main Site</a>
+</footer>
+
+</body>
+</html>
